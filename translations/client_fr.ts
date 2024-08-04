@@ -5734,7 +5734,7 @@ Le serveur a répondu avec l&apos;erreur : %2</translation>
     <message>
         <location filename="../src/gui/wizard/welcomepage.ui" line="143"/>
         <source>Log in</source>
-        <translation>Se connecter</translation>
+        <translation>Se connecter chez jin</translation>
     </message>
     <message>
         <location filename="../src/gui/wizard/welcomepage.ui" line="156"/>
@@ -6464,7 +6464,7 @@ Le serveur a répondu avec l&apos;erreur : %2</translation>
         <location filename="../src/gui/tray/UserLine.qml" line="173"/>
         <location filename="../src/gui/tray/UserLine.qml" line="193"/>
         <source>Log in</source>
-        <translation>Se connecter</translation>
+        <translation>Se connecter chez jin</translation>
     </message>
     <message>
         <location filename="../src/gui/tray/UserLine.qml" line="207"/>
