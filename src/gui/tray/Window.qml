@@ -333,50 +333,50 @@ ApplicationWindow {
                             onObjectRemoved: accountMenu.removeItem(object)
                         }
 
-                        MenuItem {
-                            id: addAccountButton
-                            height: Systray.enableAddAccount ? Style.addAccountButtonHeight : 0
-                            hoverEnabled: true
-                            visible: Systray.enableAddAccount
+                        // MenuItem {
+                        //     id: addAccountButton
+                        //     height: Systray.enableAddAccount ? Style.addAccountButtonHeight : 0
+                        //     hoverEnabled: true
+                        //     visible: Systray.enableAddAccount
 
-                            background: Item {
-                                height: parent.height
-                                width: parent.menu.width
-                                Rectangle {
-                                    anchors.fill: parent
-                                    anchors.margins: 1
-                                    color: parent.parent.hovered || parent.parent.visualFocus ? palette.highlight : palette.window
-                                }
-                            }
+                        //     background: Item {
+                        //         height: parent.height
+                        //         width: parent.menu.width
+                        //         Rectangle {
+                        //             anchors.fill: parent
+                        //             anchors.margins: 1
+                        //             color: parent.parent.hovered || parent.parent.visualFocus ? palette.highlight : palette.window
+                        //         }
+                        //     }
 
-                            RowLayout {
-                                anchors.fill: parent
-                                spacing: 0
+                        //     RowLayout {
+                        //         anchors.fill: parent
+                        //         spacing: 0
 
-                                Image {
-                                    Layout.leftMargin: 12
-                                    verticalAlignment: Qt.AlignCenter
-                                    source: Theme.darkMode ? "qrc:///client/theme/white/add.svg" : "qrc:///client/theme/black/add.svg"
-                                    sourceSize.width: Style.headerButtonIconSize
-                                    sourceSize.height: Style.headerButtonIconSize
-                                }
-                                EnforcedPlainTextLabel {
-                                    Layout.leftMargin: 14
-                                    text: qsTr("Add account")
-                                    font.pixelSize: Style.topLinePixelSize
-                                }
-                                // Filler on the right
-                                Item {
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-                                }
-                            }
-                            onClicked: UserModel.addAccount()
+                        //         Image {
+                        //             Layout.leftMargin: 12
+                        //             verticalAlignment: Qt.AlignCenter
+                        //             source: Theme.darkMode ? "qrc:///client/theme/white/add.svg" : "qrc:///client/theme/black/add.svg"
+                        //             sourceSize.width: Style.headerButtonIconSize
+                        //             sourceSize.height: Style.headerButtonIconSize
+                        //         }
+                        //         EnforcedPlainTextLabel {
+                        //             Layout.leftMargin: 14
+                        //             text: qsTr("Add account")
+                        //             font.pixelSize: Style.topLinePixelSize
+                        //         }
+                        //         // Filler on the right
+                        //         Item {
+                        //             Layout.fillWidth: true
+                        //             Layout.fillHeight: true
+                        //         }
+                        //     }
+                        //     onClicked: UserModel.addAccount()
 
-                            Accessible.role: Accessible.MenuItem
-                            Accessible.name: qsTr("Add new account")
-                            Accessible.onPressAction: addAccountButton.clicked()
-                        }
+                        //     Accessible.role: Accessible.MenuItem
+                        //     Accessible.name: qsTr("Add new account")
+                        //     Accessible.onPressAction: addAccountButton.clicked()
+                        // }
 
                         Rectangle {
                             anchors.left: parent.left
@@ -406,27 +406,27 @@ ApplicationWindow {
                             Accessible.onPressAction: syncPauseButton.clicked()
                         }
 
-                        MenuItem {
-                            id: settingsButton
-                            text: qsTr("Settings")
-                            font.pixelSize: Style.topLinePixelSize
-                            hoverEnabled: true
-                            onClicked: Systray.openSettings()
+                        // MenuItem {
+                        //     id: settingsButton
+                        //     text: qsTr("Settings")
+                        //     font.pixelSize: Style.topLinePixelSize
+                        //     hoverEnabled: true
+                        //     onClicked: Systray.openSettings()
 
-                            background: Item {
-                                height: parent.height
-                                width: parent.menu.width
-                                Rectangle {
-                                    anchors.fill: parent
-                                    anchors.margins: 1
-                                    color: parent.parent.hovered || parent.parent.visualFocus ? palette.highlight : palette.window
-                                }
-                            }
+                        //     background: Item {
+                        //         height: parent.height
+                        //         width: parent.menu.width
+                        //         Rectangle {
+                        //             anchors.fill: parent
+                        //             anchors.margins: 1
+                        //             color: parent.parent.hovered || parent.parent.visualFocus ? palette.highlight : palette.window
+                        //         }
+                        //     }
 
-                            Accessible.role: Accessible.MenuItem
-                            Accessible.name: text
-                            Accessible.onPressAction: settingsButton.clicked()
-                        }
+                        //     Accessible.role: Accessible.MenuItem
+                        //     Accessible.name: text
+                        //     Accessible.onPressAction: settingsButton.clicked()
+                        // }
 
                         MenuItem {
                             id: exitButton
