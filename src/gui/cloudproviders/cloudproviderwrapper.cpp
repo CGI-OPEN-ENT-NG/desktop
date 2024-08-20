@@ -245,9 +245,9 @@ GMenuModel* CloudProviderWrapper::getMenuModel() {
     item = menu_item_new(tr("Help"), "cloudprovider.openhelp");
     g_menu_append_item(section, item);
     g_clear_object (&item);
-    item = menu_item_new(tr("Settings"), "cloudprovider.opensettings");
-    g_menu_append_item(section, item);
-    g_clear_object (&item);
+    // item = menu_item_new(tr("Settings"), "cloudprovider.opensettings");
+    // g_menu_append_item(section, item);
+    // g_clear_object (&item);
     item = menu_item_new(tr("Log out"), "cloudprovider.logout");
     g_menu_append_item(section, item);
     g_clear_object (&item);

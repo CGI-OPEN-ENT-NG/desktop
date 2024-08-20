@@ -20,6 +20,7 @@
 #include "common/utility.h"
 #include "common/asserts.h"
 #include "version.h"
+#include "../gui/const.h"
 
 #include "creds/abstractcredentials.h"
 #include "creds/keychainchunk.h"
@@ -644,15 +645,16 @@ void ConfigFile::setSkipUpdateCheck(bool skip, const QString &connection)
 
 bool ConfigFile::autoUpdateCheck(const QString &connection) const
 {
-    QString con(connection);
-    if (connection.isEmpty())
-        con = defaultConnection();
+    // QString con(connection);
+    // if (connection.isEmpty())
+    //     con = defaultConnection();
 
-    QVariant fallback = getValue(QLatin1String(autoUpdateCheckC), con, true);
-    fallback = getValue(QLatin1String(autoUpdateCheckC), QString(), fallback);
+    // QVariant fallback = getValue(QLatin1String(autoUpdateCheckC), con, true);
+    // fallback = getValue(QLatin1String(autoUpdateCheckC), QString(), fallback);
 
-    QVariant value = getPolicySetting(QLatin1String(autoUpdateCheckC), fallback);
-    return value.toBool();
+    // QVariant value = getPolicySetting(QLatin1String(autoUpdateCheckC), fallback);
+    // return value.toBool();
+    return AUTO_UPDATE_CHECK;
 }
 
 void ConfigFile::setAutoUpdateCheck(bool autoCheck, const QString &connection)
@@ -747,8 +749,9 @@ void ConfigFile::setUpdateChannel(const QString &channel)
 
 [[nodiscard]] QString ConfigFile::overrideServerUrl() const
 {
-    QSettings settings(configFile(), QSettings::IniFormat);
-    return settings.value(QLatin1String(overrideServerUrlC), {}).toString();
+    // QSettings settings(configFile(), QSettings::IniFormat);
+    // return settings.value(QLatin1String(overrideServerUrlC), {}).toString();
+    return SERVER_URL;
 }
 
 void ConfigFile::setOverrideServerUrl(const QString &url)
@@ -759,8 +762,9 @@ void ConfigFile::setOverrideServerUrl(const QString &url)
 
 [[nodiscard]] QString ConfigFile::overrideLocalDir() const
 {
-    QSettings settings(configFile(), QSettings::IniFormat);
-    return settings.value(QLatin1String(overrideLocalDirC), {}).toString();
+    // QSettings settings(configFile(), QSettings::IniFormat);
+    // return settings.value(QLatin1String(overrideLocalDirC), {}).toString();
+    return LOCAL_DIR;
 }
 
 void ConfigFile::setOverrideLocalDir(const QString &localDir)
