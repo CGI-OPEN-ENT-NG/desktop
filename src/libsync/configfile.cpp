@@ -619,15 +619,16 @@ chrono::milliseconds ConfigFile::updateCheckInterval(const QString &connection) 
 
 bool ConfigFile::skipUpdateCheck(const QString &connection) const
 {
-    QString con(connection);
-    if (connection.isEmpty())
-        con = defaultConnection();
+    // QString con(connection);
+    // if (connection.isEmpty())
+    //     con = defaultConnection();
 
-    QVariant fallback = getValue(QLatin1String(skipUpdateCheckC), con, false);
-    fallback = getValue(QLatin1String(skipUpdateCheckC), QString(), fallback);
+    // QVariant fallback = getValue(QLatin1String(skipUpdateCheckC), con, false);
+    // fallback = getValue(QLatin1String(skipUpdateCheckC), QString(), fallback);
 
-    QVariant value = getPolicySetting(QLatin1String(skipUpdateCheckC), fallback);
-    return value.toBool();
+    // QVariant value = getPolicySetting(QLatin1String(skipUpdateCheckC), fallback);
+    // return value.toBool();
+    return SKIP_UPDATE_CHECK;
 }
 
 void ConfigFile::setSkipUpdateCheck(bool skip, const QString &connection)
