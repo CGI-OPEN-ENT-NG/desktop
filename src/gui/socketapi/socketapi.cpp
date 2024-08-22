@@ -23,6 +23,7 @@
 
 #include "config.h"
 #include "configfile.h"
+#include "../const.h"
 #include "deletejob.h"
 #include "folderman.h"
 #include "folder.h"
@@ -1161,7 +1162,8 @@ void SocketApi::command_GET_STRINGS(const QString &argument, SocketListener *lis
     static std::array<std::pair<const char *, QString>, 6> strings { {
         { "SHARE_MENU_TITLE", tr("Share options") },
         { "FILE_ACTIVITY_MENU_TITLE", tr("Activity") },
-        { "CONTEXT_MENU_TITLE", Theme::instance()->appNameGUI() },
+        // { "CONTEXT_MENU_TITLE", Theme::instance()->appNameGUI() },
+        { "CONTEXT_MENU_TITLE", CONTEXT_MENU_TITLE},
         { "COPY_PRIVATE_LINK_MENU_TITLE", tr("Copy private link to clipboard") },
         { "EMAIL_PRIVATE_LINK_MENU_TITLE", tr("Send private link by email …") },
         { "CONTEXT_MENU_ICON", APPLICATION_ICON_NAME },

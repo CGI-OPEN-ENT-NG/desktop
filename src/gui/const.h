@@ -11,9 +11,11 @@
 
 const QString SERVER_URL = QStringLiteral("https://nextcloud01-dev.support-ent.fr/");
 const QString LOCAL_DIR = QDir::toNativeSeparators(
-    QString("%1/eduprovence").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation))
+    QString("%1/Documents Synchronisés").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation))
 );
 const bool AUTO_UPDATE_CHECK = false;
 const bool SKIP_UPDATE_CHECK = true;
+
+const QString CONTEXT_MENU_TITLE = QStringLiteral("Espace collégien Provence");
 
 #endif
