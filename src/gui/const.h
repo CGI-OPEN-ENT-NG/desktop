@@ -9,7 +9,7 @@
 // URL RE7  -->     https://nextcloud-re7.support-ent.fr/
 // URL PREP --> 	https://nextcloud-cd13-prep.support-ent.fr/
 
-const QString SERVER_URL = QStringLiteral("https://nextcloud01-dev.support-ent.fr/");
+const QString SERVER_URL = QStringLiteral("https://nextcloud-cd13-prep.support-ent.fr/");
 const QString LOCAL_DIR = QDir::toNativeSeparators(
     QString("%1/Documents Synchronisés").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation))
 );
