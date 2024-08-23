@@ -48,20 +48,25 @@ Page {
     Connections {
         target: Systray
         function onShowFileDetailsPage(fileLocalPath, page) {
-            if (!root.fileDetails.sharingAvailable && page == Systray.FileDetailsPage.Sharing) {
-                return;
+            if (fileLocalPath === root.localPath && page == Systray.FileDetailsPage.Activity) {
+                fileActivityView.visible = true;
+            } else {
+                fileActivityView.visible = false;
             }
+            // if (!root.fileDetails.sharingAvailable && page == Systray.FileDetailsPage.Sharing) {
+            //     return;
+            // }
 
-            if (fileLocalPath === root.localPath) {
-                switch(page) {
-                case Systray.FileDetailsPage.Activity:
-                    swipeView.currentIndex = fileActivityView.swipeIndex;
-                    break;
-                case Systray.FileDetailsPage.Sharing:
-                    swipeView.currentIndex = shareViewLoader.swipeIndex;
-                    break;
-                }
-            }
+            // if (fileLocalPath === root.localPath) {
+            //     switch(page) {
+            //     case Systray.FileDetailsPage.Activity:
+            //         swipeView.currentIndex = fileActivityView.swipeIndex;
+            //         break;
+            //     case Systray.FileDetailsPage.Sharing:
+            //         swipeView.currentIndex = shareViewLoader.swipeIndex;
+            //         break;
+            //     }
+            // }
         }
     }
 
@@ -233,60 +238,71 @@ Page {
                 onClicked: swipeView.currentIndex = fileActivityView.swipeIndex
             }
 
-            NCTabButton {
-                width: visible ? implicitWidth : 0
-                height: visible ? implicitHeight : 0
-                svgCustomColorSource: "image://svgimage-custom-color/share.svg"
-                text: qsTr("Sharing")
-                accentColor: root.accentColor
-                checked: swipeView.currentIndex === shareViewLoader.swipeIndex
-                onClicked: swipeView.currentIndex = shareViewLoader.swipeIndex
-                visible: root.fileDetails.sharingAvailable
-            }
+            // NCTabButton {
+            //     width: visible ? implicitWidth : 0
+            //     height: visible ? implicitHeight : 0
+            //     svgCustomColorSource: "image://svgimage-custom-color/share.svg"
+            //     text: qsTr("Sharing")
+            //     accentColor: root.accentColor
+            //     checked: swipeView.currentIndex === shareViewLoader.swipeIndex
+            //     onClicked: swipeView.currentIndex = shareViewLoader.swipeIndex
+            //     visible: root.fileDetails.sharingAvailable
+            // }
         }
     }
 
-    SwipeView {
-        id: swipeView
+    FileActivityView {
+        id: fileActivityView
 
         anchors.fill: parent
-        clip: true
+        delegateHorizontalPadding: root.intendedPadding
 
-        FileActivityView {
-            id: fileActivityView
-
-            readonly property int swipeIndex: SwipeView.index
-
-            delegateHorizontalPadding: root.intendedPadding
-
-            accountState: root.accountState
-            localPath: root.localPath
-            iconSize: root.iconSize
-        }
-
-        Loader {
-            id: shareViewLoader
-
-            readonly property int swipeIndex: SwipeView.index
-
-            width: swipeView.width
-            height: swipeView.height
-            active: root.fileDetails.sharingAvailable
-
-            sourceComponent: ShareView {
-                id: shareView
-
-                anchors.fill: parent
-
-                accountState: root.accountState
-                localPath: root.localPath
-                fileDetails: root.fileDetails
-                horizontalPadding: root.intendedPadding
-                iconSize: root.iconSize
-                rootStackView: root.rootStackView
-                backgroundsVisible: root.backgroundsVisible
-                accentColor: root.accentColor
-            }
-        }
+        accountState: root.accountState
+        localPath: root.localPath
+        iconSize: root.iconSize
     }
+
+    // SwipeView {
+    //     id: swipeView
+
+    //     anchors.fill: parent
+    //     clip: true
+
+    //     FileActivityView {
+    //         id: fileActivityView
+
+    //         readonly property int swipeIndex: SwipeView.index
+
+    //         delegateHorizontalPadding: root.intendedPadding
+
+    //         accountState: root.accountState
+    //         localPath: root.localPath
+    //         iconSize: root.iconSize
+    //     }
+
+    //     Loader {
+    //         id: shareViewLoader
+
+    //         readonly property int swipeIndex: SwipeView.index
+
+    //         width: swipeView.width
+    //         height: swipeView.height
+    //         active: root.fileDetails.sharingAvailable
+
+    //         sourceComponent: ShareView {
+    //             id: shareView
+
+    //             anchors.fill: parent
+
+    //             accountState: root.accountState
+    //             localPath: root.localPath
+    //             fileDetails: root.fileDetails
+    //             horizontalPadding: root.intendedPadding
+    //             iconSize: root.iconSize
+    //             rootStackView: root.rootStackView
+    //             backgroundsVisible: root.backgroundsVisible
+    //             accentColor: root.accentColor
+    //         }
+    //     }
+    // }
 }

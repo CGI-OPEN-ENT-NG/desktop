@@ -17,6 +17,7 @@
 #include "accountstate.h"
 #include "filedetails.h"
 #include "folderman.h"
+#include "../const.h"
 
 namespace OCC {
 
@@ -181,7 +182,8 @@ void FileDetails::updateFileTagModel(const Folder * const folder)
 
 bool FileDetails::sharingAvailable() const
 {
-    return _sharingAvailable;
+    // return _sharingAvailable;
+    return SHARING_AVAILABLE;
 }
 
 } // namespace OCC
