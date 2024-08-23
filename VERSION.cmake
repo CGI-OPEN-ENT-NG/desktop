@@ -1,8 +1,10 @@
 set( MIRALL_VERSION_MAJOR 3 )
 set( MIRALL_VERSION_MINOR 13 )
-set( MIRALL_VERSION_PATCH 50 )
+set( MIRALL_VERSION_PATCH 51 )
 set( MIRALL_VERSION_YEAR  2024 )
 set( MIRALL_SOVERSION 0 )
+
+set( MIRALL_VERSION_SUFFIX "cgi")
 
 # Minimum supported server version according to https://docs.nextcloud.com/server/latest/admin_manual/release_schedule.html
 set(NEXTCLOUD_SERVER_VERSION_MIN_SUPPORTED_MAJOR 16)
