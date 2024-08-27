@@ -25,6 +25,8 @@
 #include "theme.h"
 #include "version.h"
 
+#include "../gui/const.h"
+
 #include "deletejob.h"
 #include "lockfilejobs.h"
 
@@ -1265,7 +1267,8 @@ void Account::setProxySettings(const AccountNetworkProxySetting networkProxySett
 
 Account::AccountNetworkTransferLimitSetting Account::uploadLimitSetting() const
 {
-    return _uploadLimitSetting;
+    // return _uploadLimitSetting;
+    return AccountNetworkTransferLimitSetting::ManualLimit;
 }
 
 void Account::setUploadLimitSetting(const AccountNetworkTransferLimitSetting setting)
@@ -1280,7 +1283,8 @@ void Account::setUploadLimitSetting(const AccountNetworkTransferLimitSetting set
 
 Account::AccountNetworkTransferLimitSetting Account::downloadLimitSetting() const
 {
-    return _downloadLimitSetting;
+    // return _downloadLimitSetting;
+    return AccountNetworkTransferLimitSetting::ManualLimit;
 }
 
 void Account::setDownloadLimitSetting(const AccountNetworkTransferLimitSetting setting)
@@ -1295,7 +1299,8 @@ void Account::setDownloadLimitSetting(const AccountNetworkTransferLimitSetting s
 
 unsigned int Account::uploadLimit() const
 {
-    return _uploadLimit;
+    // return _uploadLimit;
+    return UPLOAD_LIMIT;
 }
 
 void Account::setUploadLimit(const unsigned int limit)
@@ -1310,7 +1315,8 @@ void Account::setUploadLimit(const unsigned int limit)
 
 unsigned int Account::downloadLimit() const
 {
-    return _downloadLimit;
+    // return _downloadLimit;
+    return DOWNLOAD_LIMIT;
 }
 
 void Account::setDownloadLimit(const unsigned int limit)
