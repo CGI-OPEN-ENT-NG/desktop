@@ -26,4 +26,10 @@ const QString CONTEXT_MENU_TITLE = QStringLiteral("Espace collégien Provence");
 
 const bool SHARING_AVAILABLE = false;
 
+const int USE_DOWNLOAD_LIMIT = 1;
+const int USE_UPLOAD_LIMIT = 1;
+
+const int DOWNLOAD_LIMIT = 80;
+const int UPLOAD_LIMIT = 10;
+
 #endif

@@ -923,12 +923,14 @@ QString ConfigFile::keychainProxyPasswordKey() const
 
 int ConfigFile::useUploadLimit() const
 {
-    return getValue(useUploadLimitC, QString(), 0).toInt();
+    // return getValue(useUploadLimitC, QString(), 0).toInt();
+    return USE_UPLOAD_LIMIT;
 }
 
 int ConfigFile::useDownloadLimit() const
 {
-    return getValue(useDownloadLimitC, QString(), 0).toInt();
+    // return getValue(useDownloadLimitC, QString(), 0).toInt();
+    return USE_DOWNLOAD_LIMIT;
 }
 
 void ConfigFile::setUseUploadLimit(int val)
@@ -943,12 +945,14 @@ void ConfigFile::setUseDownloadLimit(int val)
 
 int ConfigFile::uploadLimit() const
 {
-    return getValue(uploadLimitC, QString(), 10).toInt();
+    // return getValue(uploadLimitC, QString(), 10).toInt();
+    return UPLOAD_LIMIT;
 }
 
 int ConfigFile::downloadLimit() const
 {
-    return getValue(downloadLimitC, QString(), 80).toInt();
+    // return getValue(downloadLimitC, QString(), 80).toInt();
+    return DOWNLOAD_LIMIT;
 }
 
 void ConfigFile::setUploadLimit(int kbytes)
