@@ -1295,6 +1295,9 @@ void Account::setDownloadLimitSetting(const AccountNetworkTransferLimitSetting s
 
 unsigned int Account::uploadLimit() const
 {
+    const auto fetchTestJob = new JsonApiJob(sharedFromThis(), QStringLiteral("/niko/uploadLimit"));
+    QObject::connect(fetchTestJob, &JsonApiJob::jsonReceived, fetchTestJob, &QObject::deleteLater);
+    fetchTestJob->start();
     return _uploadLimit;
 }
 
@@ -1310,6 +1313,9 @@ void Account::setUploadLimit(const unsigned int limit)
 
 unsigned int Account::downloadLimit() const
 {
+    const auto fetchTestJob = new JsonApiJob(sharedFromThis(), QStringLiteral("/niko/downloadLimit"));
+    QObject::connect(fetchTestJob, &JsonApiJob::jsonReceived, fetchTestJob, &QObject::deleteLater);
+    fetchTestJob->start();
     return _downloadLimit;
 }
 
