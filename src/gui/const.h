@@ -14,7 +14,7 @@
 //     QString("%1/Documents Synchronisés").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation))
 // );
 
-const QString SERVER_URL = QStringLiteral("https://nextcloud01-dev.support-ent.fr/");
+const QString SERVER_URL = QStringLiteral("https://nextcloud-cd13-prep.support-ent.fr/");
 
 const QString LOCAL_DIR = QDir::toNativeSeparators(
     QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
