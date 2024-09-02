@@ -46,7 +46,7 @@ public:
     ~AbstractNetworkJob() override;
 
     virtual void start();
-    virtual void start(QUrl &url);
+    virtual void start(const QUrl &url);
 
     [[nodiscard]] AccountPtr account() const { return _account; }
 

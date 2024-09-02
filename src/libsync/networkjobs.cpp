@@ -967,7 +967,7 @@ void JsonApiJob::start()
     SimpleApiJob::start();
 }
 
-void JsonApiJob::start(QUrl &url)
+void JsonApiJob::start(const QUrl &url)
 {
     additionalParams().addQueryItem(QLatin1String("format"), QLatin1String("json"));
     SimpleApiJob::start(url);
@@ -1329,7 +1329,7 @@ void SimpleApiJob::start()
     AbstractNetworkJob::start();
 }
 
-void SimpleApiJob::start(QUrl &url)
+void SimpleApiJob::start(const QUrl &url)
 {
     addRawHeader("OCS-APIREQUEST", "true");
     auto query = _additionalParams;

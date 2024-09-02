@@ -365,7 +365,7 @@ void AbstractNetworkJob::start()
     qCInfo(lcNetworkJob) << metaObject()->className() << "created for" << displayUrl << "+" << path() << parentMetaObjectName;
 }
 
-void AbstractNetworkJob::start(QUrl &url)
+void AbstractNetworkJob::start(const QUrl &url)
 {
     _timer.start();
 

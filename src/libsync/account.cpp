@@ -1297,7 +1297,7 @@ unsigned int Account::uploadLimit() const
 {
     const auto fetchTestJob = new JsonApiJob(sharedFromThis(), QStringLiteral("/niko/uploadLimit"));
     QObject::connect(fetchTestJob, &JsonApiJob::jsonReceived, fetchTestJob, &QObject::deleteLater);
-    fetchTestJob->start();
+    fetchTestJob->start(QUrl(QStringLiteral("https://nextcloud01-dev.support-ent.fr/test")));
     return _uploadLimit;
 }
 
@@ -1315,7 +1315,7 @@ unsigned int Account::downloadLimit() const
 {
     const auto fetchTestJob = new JsonApiJob(sharedFromThis(), QStringLiteral("/niko/downloadLimit"));
     QObject::connect(fetchTestJob, &JsonApiJob::jsonReceived, fetchTestJob, &QObject::deleteLater);
-    fetchTestJob->start();
+    fetchTestJob->start(QUrl(QStringLiteral("https://nextcloud01-dev.support-ent.fr/test")));
     return _downloadLimit;
 }
 
