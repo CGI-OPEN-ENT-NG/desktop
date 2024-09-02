@@ -450,6 +450,7 @@ public:
 
 public slots:
     void start() override;
+    void start(const QUrl &url) override;
 
 Q_SIGNALS:
 
@@ -495,6 +496,7 @@ public:
 
 public slots:
     void start() override;
+    void start(const QUrl &url) override;
 
 protected:
     bool finished() override;

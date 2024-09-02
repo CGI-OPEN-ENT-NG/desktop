@@ -967,6 +967,12 @@ void JsonApiJob::start()
     SimpleApiJob::start();
 }
 
+void JsonApiJob::start(QUrl &url)
+{
+    additionalParams().addQueryItem(QLatin1String("format"), QLatin1String("json"));
+    SimpleApiJob::start(url);
+}
+
 bool JsonApiJob::finished()
 {
     qCInfo(lcJsonApiJob) << "JsonApiJob of" << reply()->request().url() << "FINISHED WITH STATUS"
@@ -1321,6 +1327,20 @@ void SimpleApiJob::start()
         sendRequest(httpVerb, url, request());
     }
     AbstractNetworkJob::start();
+}
+
+void SimpleApiJob::start(QUrl &url)
+{
+    addRawHeader("OCS-APIREQUEST", "true");
+    auto query = _additionalParams;
+    QUrl completeUrl = Utility::concatUrlPath(url, path(), query);
+    const auto httpVerb = verbToString();
+    if (!SimpleApiJob::body().isEmpty()) {
+        sendRequest(httpVerb, completeUrl, request(), SimpleApiJob::body());
+    } else {
+        sendRequest(httpVerb, completeUrl, request());
+    }
+    AbstractNetworkJob::start(url);
 }
 
 bool SimpleApiJob::finished()
