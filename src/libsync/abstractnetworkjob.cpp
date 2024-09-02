@@ -365,6 +365,16 @@ void AbstractNetworkJob::start()
     qCInfo(lcNetworkJob) << metaObject()->className() << "created for" << displayUrl << "+" << path() << parentMetaObjectName;
 }
 
+void AbstractNetworkJob::start(QUrl &url)
+{
+    _timer.start();
+
+    const QString displayUrl = QString("%1://%2%3").arg(url.scheme()).arg(url.host()).arg(url.path());
+
+    QString parentMetaObjectName = parent() ? parent()->metaObject()->className() : "";
+    qCInfo(lcNetworkJob) << metaObject()->className() << "created for" << displayUrl << "+" << path() << parentMetaObjectName;
+}
+
 void AbstractNetworkJob::slotTimeout()
 {
     _timedout = true;
