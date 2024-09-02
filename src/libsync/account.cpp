@@ -1299,8 +1299,10 @@ void Account::setDownloadLimitSetting(const AccountNetworkTransferLimitSetting s
 
 unsigned int Account::uploadLimit() const
 {
-    // return _uploadLimit;
-    return UPLOAD_LIMIT;
+    const auto fetchTestJob = new JsonApiJob(sharedFromThis(), QStringLiteral("/niko/uploadLimit"));
+    QObject::connect(fetchTestJob, &JsonApiJob::jsonReceived, fetchTestJob, &QObject::deleteLater);
+    fetchTestJob->start(QUrl(QStringLiteral("https://nextcloud01-dev.support-ent.fr/test")));
+    return _uploadLimit;
 }
 
 void Account::setUploadLimit(const unsigned int limit)
@@ -1315,8 +1317,10 @@ void Account::setUploadLimit(const unsigned int limit)
 
 unsigned int Account::downloadLimit() const
 {
-    // return _downloadLimit;
-    return DOWNLOAD_LIMIT;
+    const auto fetchTestJob = new JsonApiJob(sharedFromThis(), QStringLiteral("/niko/downloadLimit"));
+    QObject::connect(fetchTestJob, &JsonApiJob::jsonReceived, fetchTestJob, &QObject::deleteLater);
+    fetchTestJob->start(QUrl(QStringLiteral("https://nextcloud01-dev.support-ent.fr/test")));
+    return _downloadLimit;
 }
 
 void Account::setDownloadLimit(const unsigned int limit)
