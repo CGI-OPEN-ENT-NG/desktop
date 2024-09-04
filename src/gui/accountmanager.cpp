@@ -508,18 +508,18 @@ AccountPtr AccountManager::loadAccountHelper(QSettings &settings)
     acc->setProxyPort(settings.value(networkProxyPortC).toInt());
     acc->setProxyNeedsAuth(settings.value(networkProxyNeedsAuthC).toBool());
     acc->setProxyUser(settings.value(networkProxyUserC).toString());
-    acc->setUploadLimitSetting(
-        settings.value(
-            networkUploadLimitSettingC,
-            QVariant::fromValue(Account::AccountNetworkTransferLimitSetting::GlobalLimit)
-        ).value<Account::AccountNetworkTransferLimitSetting>());
-    acc->setDownloadLimitSetting(
-        settings.value(
-            networkDownloadLimitSettingC,
-            QVariant::fromValue(Account::AccountNetworkTransferLimitSetting::GlobalLimit)
-        ).value<Account::AccountNetworkTransferLimitSetting>());
-    acc->setUploadLimit(settings.value(networkUploadLimitC).toInt());
-    acc->setDownloadLimit(settings.value(networkDownloadLimitC).toInt());
+    // acc->setUploadLimitSetting(
+    //     settings.value(
+    //         networkUploadLimitSettingC,
+    //         QVariant::fromValue(Account::AccountNetworkTransferLimitSetting::GlobalLimit)
+    //     ).value<Account::AccountNetworkTransferLimitSetting>());
+    // acc->setDownloadLimitSetting(
+    //     settings.value(
+    //         networkDownloadLimitSettingC,
+    //         QVariant::fromValue(Account::AccountNetworkTransferLimitSetting::GlobalLimit)
+    //     ).value<Account::AccountNetworkTransferLimitSetting>());
+    // acc->setUploadLimit(settings.value(networkUploadLimitC).toInt());
+    // acc->setDownloadLimit(settings.value(networkDownloadLimitC).toInt());
 
     const auto proxyPasswordKey = QString(acc->userIdAtHostWithPort() + networkProxyPasswordKeychainKeySuffixC);
     const auto job = new QKeychain::ReadPasswordJob(Theme::instance()->appName(), this);
