@@ -969,7 +969,6 @@ void JsonApiJob::start()
 
 void JsonApiJob::start(const QUrl &url)
 {
-    additionalParams().addQueryItem(QLatin1String("format"), QLatin1String("json"));
     SimpleApiJob::start(url);
 }
 

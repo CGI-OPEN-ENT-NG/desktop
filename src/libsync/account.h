@@ -404,9 +404,11 @@ public:
 
     /** in kbyte/s */
     [[nodiscard]] unsigned int uploadLimit() const;
+    [[nodiscard]] unsigned int uploadLimit(QSettings &settings) const;
     void setUploadLimit(unsigned int kbytes);
 
     [[nodiscard]] unsigned int downloadLimit() const;
+    [[nodiscard]] unsigned int downloadLimit(QSettings &settings) const;
     void setDownloadLimit(unsigned int kbytes);
 
 public slots:
