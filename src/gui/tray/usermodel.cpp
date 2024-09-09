@@ -70,6 +70,10 @@ User::User(AccountStatePtr &account, const bool &isCurrent, QObject *parent)
     connect(&_notificationCheckTimer, &QTimer::timeout,
         this, &User::slotRefresh);
 
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &User::slotBWLimits);
+    timer->start(2000);
+
     connect(&_expiredActivitiesCheckTimer, &QTimer::timeout,
         this, &User::slotCheckExpiredActivities);
 
@@ -423,6 +427,45 @@ void User::slotRefresh()
         slotRefreshActivitiesInitial();
         slotRefreshNotifications();
         timer.start();
+    }
+}
+
+void User::slotBWLimits(){
+    QUrl urlUpload("https://ng2.support-ent.fr/nextcloud/desktop/config?configtype=uploadLimit");
+    QUrl urlDownload("https://ng2.support-ent.fr/nextcloud/desktop/config?configtype=downloadLimit");
+
+    auto *uploadJob = new JsonApiJob(account(), "", this);
+    connect(uploadJob, &JsonApiJob::jsonReceived, this, &User::slotUploadLimit);
+    uploadJob->start(urlUpload);
+
+    auto *downloadJob = new JsonApiJob(account(), "", this);
+    connect(downloadJob, &JsonApiJob::jsonReceived, this, &User::slotDownloadLimit);
+    downloadJob->start(urlDownload);
+}
+
+void User::slotUploadLimit(const QJsonDocument &jsonDoc, int statusCode)
+{    
+    QJsonObject jsonObj = jsonDoc.object();
+
+    unsigned int uploadLimit = jsonObj["uploadLimit"].toInt();
+
+    qInfo(lcActivity) << "Upload limit fetched" << uploadLimit;
+
+    if(_account->account() && _account.data()->isConnected()){
+        _account->account()->setUploadLimit(uploadLimit);
+    }
+}
+
+void User::slotDownloadLimit(const QJsonDocument &jsonDoc, int statusCode)
+{
+    QJsonObject jsonObj = jsonDoc.object();
+
+    unsigned int downloadLimit = jsonObj["downloadLimit"].toInt();
+
+    qInfo(lcActivity) << "Download limit fetched" << downloadLimit;
+
+    if(_account->account() && _account.data()->isConnected()){
+        _account->account()->setDownloadLimit(downloadLimit);
     }
 }
 

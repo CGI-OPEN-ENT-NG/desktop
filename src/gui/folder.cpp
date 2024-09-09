@@ -1160,9 +1160,8 @@ void Folder::setDirtyNetworkLimits()
     // } else if (useUpLimit == 0) {
     //     uploadLimit = 0;
     // }
-    auto settings = _accountState->settings();
-    const auto uploadLimit = account->uploadLimit(*settings) * 1000;
-    const auto downloadLimit = account->downloadLimit(*settings) * 1000;
+    const auto uploadLimit = account->uploadLimit() * 1000;
+    const auto downloadLimit = account->downloadLimit() * 1000;
 
     _engine->setNetworkLimits(uploadLimit, downloadLimit);
 }

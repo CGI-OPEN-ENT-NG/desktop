@@ -1301,49 +1301,6 @@ unsigned int Account::uploadLimit() const{
     return _uploadLimit;
 }
 
-unsigned int Account::uploadLimit(QSettings &settings) const
-{
-    QEventLoop eventLoop;
-    unsigned int uploadLimit = UPLOAD_LIMIT;
-
-    auto fetchTestJob = new JsonApiJob(sharedFromThis(), QStringLiteral("/config"));
-    QUrlQuery query;
-    query.addQueryItem(QStringLiteral("configtype"), QStringLiteral("uploadLimit"));
-    fetchTestJob->addQueryParams(query);
-
-    QTimer timer;
-    timer.setSingleShot(true);
-
-    QObject::connect(fetchTestJob, &JsonApiJob::jsonReceived, &eventLoop, 
-        [&eventLoop, &uploadLimit, fetchTestJob, &timer](const QJsonDocument &jsonDoc) {
-            qCInfo(lcAccount) << "niko-test" << jsonDoc.toJson();
-            if (timer.isActive()) { 
-                QJsonObject jsonObj = jsonDoc.object();
-                if (jsonObj.contains("uploadLimit") && jsonObj["uploadLimit"].isDouble()) {
-                    uploadLimit = static_cast<unsigned int>(jsonObj["uploadLimit"].toInt());
-                }
-                timer.stop();
-                fetchTestJob->deleteLater();
-                eventLoop.quit();
-            }
-        });
-
-    fetchTestJob->start(QUrl(QStringLiteral("https://ng2.support-ent.fr/nextcloud/desktop")));
-    timer.start(5000);
-
-    eventLoop.exec();
-
-    if (timer.isActive()) {
-        timer.stop(); 
-    } else {
-        fetchTestJob->deleteLater();
-    }
-
-    settings.setValue(QStringLiteral("networkUploadLimit"), uploadLimit);
-
-    return uploadLimit; 
-}
-
 void Account::setUploadLimit(const unsigned int limit)
 {
     if (_uploadLimit == limit) {
@@ -1357,49 +1314,6 @@ void Account::setUploadLimit(const unsigned int limit)
 unsigned int Account::downloadLimit() const{
     return _downloadLimit;
 }
-
-unsigned int Account::downloadLimit(QSettings &settings) const
-{
-    QEventLoop eventLoop;
-    unsigned int downloadLimit = DOWNLOAD_LIMIT;
-
-    auto fetchTestJob = new JsonApiJob(sharedFromThis(), QStringLiteral("/config"));
-    QUrlQuery query;
-    query.addQueryItem(QStringLiteral("configtype"), QStringLiteral("downloadLimit"));
-    fetchTestJob->addQueryParams(query);
-
-    QTimer timer;
-    timer.setSingleShot(true);
-
-    QObject::connect(fetchTestJob, &JsonApiJob::jsonReceived, &eventLoop, 
-        [&eventLoop, &downloadLimit, fetchTestJob, &timer](const QJsonDocument &jsonDoc) {
-            if (timer.isActive()) { 
-                QJsonObject jsonObj = jsonDoc.object();
-                if (jsonObj.contains("downloadLimit") && jsonObj["downloadLimit"].isDouble()) {
-                    downloadLimit = static_cast<unsigned int>(jsonObj["downloadLimit"].toInt());
-                }
-                timer.stop();
-                fetchTestJob->deleteLater();
-                eventLoop.quit();
-            }
-        });
-
-    fetchTestJob->start(QUrl(QStringLiteral("https://ng2.support-ent.fr/nextcloud/desktop")));
-    timer.start(5000);
-
-    eventLoop.exec();
-
-    if (timer.isActive()) {
-        timer.stop(); 
-    } else {
-        fetchTestJob->deleteLater();
-    }
-
-    settings.setValue(QStringLiteral("networkDownloadLimit"), downloadLimit);
-
-    return downloadLimit; 
-}
-
 
 void Account::setDownloadLimit(const unsigned int limit)
 {

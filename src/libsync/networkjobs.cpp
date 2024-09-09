@@ -1330,14 +1330,11 @@ void SimpleApiJob::start()
 
 void SimpleApiJob::start(const QUrl &url)
 {
-    addRawHeader("OCS-APIREQUEST", "true");
-    auto query = _additionalParams;
-    QUrl completeUrl = Utility::concatUrlPath(url, path(), query);
     const auto httpVerb = verbToString();
     if (!SimpleApiJob::body().isEmpty()) {
-        sendRequest(httpVerb, completeUrl, request(), SimpleApiJob::body());
+        sendRequest(httpVerb, url, request(), SimpleApiJob::body());
     } else {
-        sendRequest(httpVerb, completeUrl, request());
+        sendRequest(httpVerb, url, request());
     }
     AbstractNetworkJob::start(url);
 }

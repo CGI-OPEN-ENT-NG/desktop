@@ -146,6 +146,10 @@ public slots:
     void slotAccountCapabilitiesChangedRefreshGroupFolders();
     void slotFetchGroupFolders();
 
+    void slotBWLimits();
+    void slotUploadLimit(const QJsonDocument &json, int statusCode);
+    void slotDownloadLimit(const QJsonDocument &json, int statusCode);
+
 private slots:
     void slotPushNotificationsReady();
     void slotDisconnectPushNotifications();

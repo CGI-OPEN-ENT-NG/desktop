@@ -353,10 +353,8 @@ void AccountManager::saveAccountHelper(Account *acc, QSettings &settings, bool s
     settings.setValue(networkProxyUserC, acc->proxyUser());
     settings.setValue(networkUploadLimitSettingC, static_cast<std::underlying_type_t<Account::AccountNetworkTransferLimitSetting>>(acc->uploadLimitSetting()));
     settings.setValue(networkDownloadLimitSettingC, static_cast<std::underlying_type_t<Account::AccountNetworkTransferLimitSetting>>(acc->downloadLimitSetting()));
-    // settings.setValue(networkUploadLimitC, acc->uploadLimit());
-    acc->uploadLimit(settings);
-    // settings.setValue(networkDownloadLimitC, acc->downloadLimit());
-    acc->downloadLimit(settings);
+    settings.setValue(networkUploadLimitC, acc->uploadLimit());
+    settings.setValue(networkDownloadLimitC, acc->downloadLimit());
 
     const auto proxyPasswordKey = QString(acc->userIdAtHostWithPort() + networkProxyPasswordKeychainKeySuffixC);
     if (const auto proxyPassword = acc->proxyPassword(); proxyPassword.isEmpty()) {
@@ -522,8 +520,6 @@ AccountPtr AccountManager::loadAccountHelper(QSettings &settings)
     //     ).value<Account::AccountNetworkTransferLimitSetting>());
     // acc->setUploadLimit(settings.value(networkUploadLimitC).toInt());
     // acc->setDownloadLimit(settings.value(networkDownloadLimitC).toInt());
-    acc->uploadLimit(settings);
-    acc->downloadLimit(settings);
     
     const auto proxyPasswordKey = QString(acc->userIdAtHostWithPort() + networkProxyPasswordKeychainKeySuffixC);
     const auto job = new QKeychain::ReadPasswordJob(Theme::instance()->appName(), this);
