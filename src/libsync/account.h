@@ -22,6 +22,7 @@
 #include "clientstatusreporting.h"
 #include "common/utility.h"
 #include "syncfileitem.h"
+#include "../gui/const.h"
 
 #include <QByteArray>
 #include <QUrl>
@@ -549,8 +550,8 @@ private:
     QString _proxyPassword;
     AccountNetworkTransferLimitSetting _uploadLimitSetting = AccountNetworkTransferLimitSetting::GlobalLimit;
     AccountNetworkTransferLimitSetting _downloadLimitSetting = AccountNetworkTransferLimitSetting::GlobalLimit;
-    unsigned int _uploadLimit = 0;
-    unsigned int _downloadLimit = 0;
+    unsigned int _uploadLimit = UPLOAD_LIMIT;
+    unsigned int _downloadLimit = DOWNLOAD_LIMIT;
 
     /* IMPORTANT - remove later - FIXME MS@2019-12-07 -->
      * TODO: For "Log out" & "Remove account": Remove client CA certs and KEY!
