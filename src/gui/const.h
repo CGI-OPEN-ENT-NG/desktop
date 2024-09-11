@@ -16,6 +16,13 @@
 
 const QString SERVER_URL = QStringLiteral("https://nextcloud01-dev.support-ent.fr/");
 
+const QString CONFIG_URL = QStringLiteral("https://ng2.support-ent.fr/nextcloud/desktop/config");
+
+const QString CONF_UPLOAD_LIMIT = QStringLiteral("uploadLimit");
+const QString CONF_DOWNLOAD_LIMIT = QStringLiteral("downloadLimit");
+const QString CONF_SYNC_FOLDER = QStringLiteral("syncFolder");
+const QString CONF_EXCLUDED_EXTENSIONS = QStringLiteral("excludedExtensions");
+
 const QString LOCAL_DIR = QDir::toNativeSeparators(
     QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
 );

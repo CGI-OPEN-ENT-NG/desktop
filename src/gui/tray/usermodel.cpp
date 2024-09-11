@@ -19,6 +19,7 @@
 #include "tray/talkreply.h"
 #include "userstatusconnector.h"
 #include "thumbnailjob.h"
+#include "../const.h"
 
 #include <QDesktopServices>
 #include <QIcon>
@@ -431,40 +432,23 @@ void User::slotRefresh()
 }
 
 void User::slotBWLimits(){
-    QUrl urlUpload("https://ng2.support-ent.fr/nextcloud/desktop/config?configtype=uploadLimit");
-    QUrl urlDownload("https://ng2.support-ent.fr/nextcloud/desktop/config?configtype=downloadLimit");
-
-    auto *uploadJob = new JsonApiJob(account(), "", this);
-    connect(uploadJob, &JsonApiJob::jsonReceived, this, &User::slotUploadLimit);
-    uploadJob->start(urlUpload);
-
-    auto *downloadJob = new JsonApiJob(account(), "", this);
-    connect(downloadJob, &JsonApiJob::jsonReceived, this, &User::slotDownloadLimit);
-    downloadJob->start(urlDownload);
+    auto *bwLimitsJob = new JsonApiJob(account(), "", this);
+    connect(bwLimitsJob, &JsonApiJob::jsonReceived, this, &User::fetchBWLimits);
+    bwLimitsJob->start(CONFIG_URL);
 }
 
-void User::slotUploadLimit(const QJsonDocument &jsonDoc, int statusCode)
+void User::fetchBWLimits(const QJsonDocument &jsonDoc, int statusCode)
 {    
     QJsonObject jsonObj = jsonDoc.object();
 
-    unsigned int uploadLimit = jsonObj["uploadLimit"].toInt();
+    unsigned int uploadLimit = jsonObj[CONF_UPLOAD_LIMIT].toInt();
+    unsigned int downloadLimit = jsonObj[CONF_DOWNLOAD_LIMIT].toInt();
 
     qInfo(lcActivity) << "Upload limit fetched" << uploadLimit;
-
-    if(_account->account() && _account.data()->isConnected()){
-        _account->account()->setUploadLimit(uploadLimit);
-    }
-}
-
-void User::slotDownloadLimit(const QJsonDocument &jsonDoc, int statusCode)
-{
-    QJsonObject jsonObj = jsonDoc.object();
-
-    unsigned int downloadLimit = jsonObj["downloadLimit"].toInt();
-
     qInfo(lcActivity) << "Download limit fetched" << downloadLimit;
 
     if(_account->account() && _account.data()->isConnected()){
+        _account->account()->setUploadLimit(uploadLimit);
         _account->account()->setDownloadLimit(downloadLimit);
     }
 }
