@@ -447,9 +447,15 @@ void User::fetchBWLimits(const QJsonDocument &jsonDoc, int statusCode)
     qInfo(lcActivity) << "Upload limit fetched" << uploadLimit;
     qInfo(lcActivity) << "Download limit fetched" << downloadLimit;
 
-    if(_account->account() && _account.data()->isConnected()){
+    if(_account->account() && _account.data()->isConnected() && uploadLimit > 0 && downloadLimit > 0) {
         _account->account()->setUploadLimit(uploadLimit);
         _account->account()->setDownloadLimit(downloadLimit);
+        // save the limits to the config file
+        const auto settings = ConfigFile::settingsWithGroup(QLatin1String("Accounts"));
+        settings->beginGroup(_account->account()->id());
+        settings->setValue("networkUploadLimit", uploadLimit);
+        settings->setValue("networkDownloadLimit", downloadLimit);
+        settings->endGroup();
     }
 }
 
