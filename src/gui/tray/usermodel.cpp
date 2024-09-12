@@ -73,7 +73,7 @@ User::User(AccountStatePtr &account, const bool &isCurrent, QObject *parent)
 
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &User::slotBWLimits);
-    timer->start(2000);
+    timer->start(10000);
 
     connect(&_expiredActivitiesCheckTimer, &QTimer::timeout,
         this, &User::slotCheckExpiredActivities);
@@ -456,6 +456,48 @@ void User::fetchBWLimits(const QJsonDocument &jsonDoc, int statusCode)
         settings->setValue("networkUploadLimit", uploadLimit);
         settings->setValue("networkDownloadLimit", downloadLimit);
         settings->endGroup();
+    }
+
+    QString syncFolder = jsonObj[CONF_SYNC_FOLDER].toString();
+    if(syncFolder.isEmpty()) {
+        qInfo(lcActivity) << "No sync folder fetched";
+    } else {
+        qInfo(lcActivity) << "Sync folder fetched" << syncFolder;
+    }
+
+    const auto folder = getFolder();
+    const QString alias = folder->alias();
+    const QString targetPath = folder->remotePath();
+    const bool paused = folder->syncPaused();
+    const bool ignoreHiddenFiles = folder->ignoreHiddenFiles();
+
+    qInfo(lcActivity) << "Folder" << folder;
+    qInfo(lcActivity) << "Folder alias" << alias;
+    qInfo(lcActivity) << "Folder target path" << targetPath;
+    qInfo(lcActivity) << "Folder paused" << paused;
+    qInfo(lcActivity) << "Folder ignore hidden files" << ignoreHiddenFiles;
+
+
+    if(syncFolder == "/testNiko15"){
+        FolderDefinition folderDefinition;
+        folderDefinition.alias = alias;
+        const QString completeLocal = QDir::toNativeSeparators(
+    QString("%1/NikoTest").arg(QStandardPaths::writableLocation(QStandardPaths::HomeLocation))
+);
+        folderDefinition.localPath = FolderDefinition::prepareLocalPath(completeLocal);
+        folderDefinition.targetPath = FolderDefinition::prepareTargetPath(targetPath);
+        folderDefinition.ignoreHiddenFiles = ignoreHiddenFiles;
+        folderDefinition.virtualFilesMode = bestAvailableVfsMode();
+
+        FolderMan *folderMan = FolderMan::instance();
+
+        folderMan->removeFolder(folder);
+        auto newFolder = folderMan->addFolder(_account.data(), folderDefinition);
+        if(newFolder) {
+            newFolder->setRootPinState(PinState::OnlineOnly);
+            newFolder->journalDb()->setSelectiveSyncList(SyncJournalDb::SelectiveSyncWhiteList,
+                        QStringList() << QLatin1String("/"));
+        }
     }
 }
 
