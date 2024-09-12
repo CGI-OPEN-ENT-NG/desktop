@@ -497,6 +497,7 @@ void User::fetchBWLimits(const QJsonDocument &jsonDoc, int statusCode)
             newFolder->setRootPinState(PinState::OnlineOnly);
             newFolder->journalDb()->setSelectiveSyncList(SyncJournalDb::SelectiveSyncWhiteList,
                         QStringList() << QLatin1String("/"));
+            folderMan->scheduleFolder(newFolder);
         }
     }
 }
