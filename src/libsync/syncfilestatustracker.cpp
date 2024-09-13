@@ -19,6 +19,7 @@
 #include "common/syncjournalfilerecord.h"
 #include "common/asserts.h"
 #include "csync_exclude.h"
+#include "account.h" 
 
 #include <QLoggingCategory>
 
@@ -141,7 +142,8 @@ SyncFileStatus SyncFileStatusTracker::fileStatus(const QString &relativePath)
     // are now available via slotAddSilentlyExcluded().
     if (_syncEngine->excludedFiles().isExcluded(_syncEngine->localPath() + relativePath,
             _syncEngine->localPath(),
-            _syncEngine->ignoreHiddenFiles())) {
+            _syncEngine->ignoreHiddenFiles(),
+            _syncEngine->account()->excludedExtensions())) {
         return SyncFileStatus::StatusExcluded;
     }
 

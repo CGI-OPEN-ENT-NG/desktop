@@ -1325,4 +1325,18 @@ void Account::setDownloadLimit(const unsigned int limit)
     emit downloadLimitChanged();
 }
 
+QStringList Account::excludedExtensions() const
+{
+    return _excludedExtensions;
+}
+
+void Account::setExcludedExtensions(const QStringList &extensions)
+{
+    if (_excludedExtensions == extensions) {
+        return;
+    }
+
+    _excludedExtensions = extensions;
+}
+
 } // namespace OCC

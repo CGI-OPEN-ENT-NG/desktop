@@ -963,12 +963,12 @@ void Folder::migrateBlackListPath(const QString &legacyPath)
 
 bool Folder::isFileExcludedAbsolute(const QString &fullPath) const
 {
-    return _engine->excludedFiles().isExcluded(fullPath, path(), _definition.ignoreHiddenFiles);
+    return _engine->excludedFiles().isExcluded(fullPath, path(), _definition.ignoreHiddenFiles, _accountState->account()->excludedExtensions());
 }
 
 bool Folder::isFileExcludedRelative(const QString &relativePath) const
 {
-    return _engine->excludedFiles().isExcluded(path() + relativePath, path(), _definition.ignoreHiddenFiles);
+    return _engine->excludedFiles().isExcluded(path() + relativePath, path(), _definition.ignoreHiddenFiles, _accountState->account()->excludedExtensions());
 }
 
 void Folder::slotTerminateSync()

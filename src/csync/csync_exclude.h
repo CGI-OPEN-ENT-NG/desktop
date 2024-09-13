@@ -28,6 +28,7 @@
 #include <QObject>
 #include <QSet>
 #include <QString>
+#include <QStringList>
 #include <QRegularExpression>
 
 #include <functional>
@@ -98,7 +99,8 @@ public:
     [[nodiscard]] bool isExcluded(
         const QString &filePath,
         const QString &basePath,
-        bool excludeHidden) const;
+        bool excludeHidden,
+        const QStringList &excludedExtensions) const;
 
     /**
      * Adds an exclude pattern anchored to base path

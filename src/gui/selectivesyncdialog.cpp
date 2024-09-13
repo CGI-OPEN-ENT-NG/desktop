@@ -210,7 +210,7 @@ void SelectiveSyncWidget::slotUpdateDirectories(QStringList list)
     QMutableListIterator<QString> it(list);
     while (it.hasNext()) {
         it.next();
-        if (_excludedFiles.isExcluded(it.value(), pathToRemove, FolderMan::instance()->ignoreHiddenFiles()))
+        if (_excludedFiles.isExcluded(it.value(), pathToRemove, FolderMan::instance()->ignoreHiddenFiles(), _account->excludedExtensions()))
             it.remove();
     }
 

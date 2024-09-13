@@ -410,6 +410,9 @@ public:
     [[nodiscard]] unsigned int downloadLimit() const;
     void setDownloadLimit(unsigned int kbytes);
 
+    [[nodiscard]] QStringList excludedExtensions() const;
+    void setExcludedExtensions(const QStringList &extensions);
+
 public slots:
     /// Used when forgetting credentials
     void clearQNAMCache();
@@ -552,6 +555,7 @@ private:
     AccountNetworkTransferLimitSetting _downloadLimitSetting = AccountNetworkTransferLimitSetting::GlobalLimit;
     unsigned int _uploadLimit = UPLOAD_LIMIT;
     unsigned int _downloadLimit = DOWNLOAD_LIMIT;
+    QStringList _excludedExtensions;
 
     /* IMPORTANT - remove later - FIXME MS@2019-12-07 -->
      * TODO: For "Log out" & "Remove account": Remove client CA certs and KEY!

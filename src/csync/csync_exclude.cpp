@@ -35,6 +35,7 @@
 #include "../version.h"
 
 #include <QString>
+#include <QStringList>
 #include <QFileInfo>
 #include <QDir>
 #include <QVariant>
@@ -388,7 +389,8 @@ bool ExcludedFiles::versionDirectiveKeepNextLine(const QByteArray &directive) co
 bool ExcludedFiles::isExcluded(
     const QString &filePath,
     const QString &basePath,
-    bool excludeHidden) const
+    bool excludeHidden, 
+    const QStringList &excludedExtensions) const
 {
     if (!filePath.startsWith(basePath, Utility::fsCasePreserving() ? Qt::CaseInsensitive : Qt::CaseSensitive)) {
         // Mark paths we're not responsible for as excluded...
@@ -409,6 +411,13 @@ bool ExcludedFiles::isExcluded(
 
             // Get the parent path
             path = fi.absolutePath();
+        }
+    }
+
+    // Check if the file is excluded by the traversal pattern matcher
+    for (const QString &ext : excludedExtensions) {
+        if (filePath.endsWith(ext, Qt::CaseInsensitive)) {
+            return true; 
         }
     }
 
