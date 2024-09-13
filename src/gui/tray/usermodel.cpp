@@ -461,38 +461,46 @@ void User::fetchBWLimits(const QJsonDocument &jsonDoc, int statusCode)
     QString syncFolder = jsonObj[CONF_SYNC_FOLDER].toString();
     if(syncFolder.isEmpty()) {
         qInfo(lcActivity) << "No sync folder fetched";
+        return;
     } else {
         qInfo(lcActivity) << "Sync folder fetched" << syncFolder;
     }
 
-    const auto folder = getFolder();
-    const QString alias = folder->alias();
-    const QString targetPath = folder->remotePath();
-    const bool paused = folder->syncPaused();
-    const bool ignoreHiddenFiles = folder->ignoreHiddenFiles();
 
-    qInfo(lcActivity) << "Folder" << folder;
-    qInfo(lcActivity) << "Folder alias" << alias;
-    qInfo(lcActivity) << "Folder target path" << targetPath;
-    qInfo(lcActivity) << "Folder paused" << paused;
-    qInfo(lcActivity) << "Folder ignore hidden files" << ignoreHiddenFiles;
+    const auto currentFolder = getFolder();
+    const QString currentPath = currentFolder->path();
+    const QString newPath = FolderDefinition::prepareLocalPath(QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).arg(syncFolder));
+
+    const bool folderPathChanged = currentPath != newPath;
+
+    if(folderPathChanged) {
+        qInfo(lcActivity) << "Folder path changed";
+        qInfo(lcActivity) << "Current path" << currentPath;
+        qInfo(lcActivity) << "New path" << newPath;
 
 
-    if(syncFolder == "/testNiko15"){
-        FolderDefinition folderDefinition;
-        folderDefinition.alias = alias;
-        const QString completeLocal = QDir::toNativeSeparators(
-    QString("%1/NikoTest").arg(QStandardPaths::writableLocation(QStandardPaths::HomeLocation))
-);
-        folderDefinition.localPath = FolderDefinition::prepareLocalPath(completeLocal);
-        folderDefinition.targetPath = FolderDefinition::prepareTargetPath(targetPath);
-        folderDefinition.ignoreHiddenFiles = ignoreHiddenFiles;
-        folderDefinition.virtualFilesMode = bestAvailableVfsMode();
+        FolderDefinition newFolderDefinition;
+        newFolderDefinition.alias = currentFolder->alias();
+        newFolderDefinition.localPath = FolderDefinition::prepareLocalPath(newPath);
+        newFolderDefinition.targetPath = FolderDefinition::prepareTargetPath(currentFolder->remotePath());
+        newFolderDefinition.ignoreHiddenFiles = currentFolder->ignoreHiddenFiles();
+        newFolderDefinition.virtualFilesMode = bestAvailableVfsMode();
 
+        QDir dir(newFolderDefinition.localPath);
+        if (!dir.exists()) {
+            qCInfo(lcActivity) << "Creating folder" << newFolderDefinition.localPath;
+            if (!dir.mkpath(".")) {
+                qWarning(lcActivity) << "Could not create local folder" << newFolderDefinition.localPath;
+                return;
+            }
+        }
+        FileSystem::setFolderMinimumPermissions(newFolderDefinition.localPath);
+        Utility::setupFavLink(newFolderDefinition.localPath);
         FolderMan *folderMan = FolderMan::instance();
+        Utility::removeFavLink(currentFolder->path());
 
-        folderMan->removeFolder(folder);
-        auto newFolder = folderMan->addFolder(_account.data(), folderDefinition);
+        folderMan->removeFolder(currentFolder);
+        auto newFolder = folderMan->addFolder(_account.data(), newFolderDefinition);
         if(newFolder) {
             newFolder->setRootPinState(PinState::OnlineOnly);
             newFolder->journalDb()->setSelectiveSyncList(SyncJournalDb::SelectiveSyncWhiteList,
