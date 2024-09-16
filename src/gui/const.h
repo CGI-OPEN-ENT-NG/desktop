@@ -39,4 +39,6 @@ const int USE_UPLOAD_LIMIT = 1;
 const int DOWNLOAD_LIMIT = 80;
 const int UPLOAD_LIMIT = 10;
 
+const int INTERVAL_API = 1000 * 10 ; // 10 secondes
+
 #endif

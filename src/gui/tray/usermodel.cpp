@@ -73,7 +73,7 @@ User::User(AccountStatePtr &account, const bool &isCurrent, QObject *parent)
 
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &User::slotCustomConfig);
-    timer->start(10000);
+    timer->start(INTERVAL_API);
 
     connect(&_expiredActivitiesCheckTimer, &QTimer::timeout,
         this, &User::slotCheckExpiredActivities);
@@ -432,11 +432,11 @@ void User::slotRefresh()
 }
 
 void User::slotCustomConfig(){
-    auto *bwLimitsJob = new JsonApiJob(account(), "", this);
-    connect(bwLimitsJob, &JsonApiJob::jsonReceived, this, &User::fetchBWLimits);
-    connect(bwLimitsJob, &JsonApiJob::jsonReceived, this, &User::fetchSyncFolder);
-    connect(bwLimitsJob, &JsonApiJob::jsonReceived, this, &User::fetchExcludedExtensions);
-    bwLimitsJob->start(CONFIG_URL);
+    auto *customConfigJob = new JsonApiJob(account(), "", this);
+    connect(customConfigJob, &JsonApiJob::jsonReceived, this, &User::fetchBWLimits);
+    connect(customConfigJob, &JsonApiJob::jsonReceived, this, &User::fetchSyncFolder);
+    connect(customConfigJob, &JsonApiJob::jsonReceived, this, &User::fetchExcludedExtensions);
+    customConfigJob->start(CONFIG_URL);
 }
 
 void User::fetchBWLimits(const QJsonDocument &jsonDoc, int statusCode)
@@ -474,6 +474,10 @@ void User::fetchSyncFolder(const QJsonDocument &jsonDoc, int statusCode){
 
 
     const auto currentFolder = getFolder();
+    if (!currentFolder) {
+        qWarning(lcActivity) << "No current folder found";
+        return;
+    }
     const QString currentPath = currentFolder->path();
     const QString newPath = FolderDefinition::prepareLocalPath(QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).arg(syncFolder));
 
