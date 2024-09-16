@@ -24,7 +24,7 @@ const QString CONF_SYNC_FOLDER = QStringLiteral("syncFolder");
 const QString CONF_EXCLUDED_EXTENSIONS = QStringLiteral("excludedExtensions");
 
 const QString LOCAL_DIR = QDir::toNativeSeparators(
-    QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
+    QString("%1/NextCloud").arg(QStandardPaths::writableLocation(QStandardPaths::HomeLocation))
 );
 const bool AUTO_UPDATE_CHECK = false;
 const bool SKIP_UPDATE_CHECK = true;

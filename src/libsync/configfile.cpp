@@ -42,6 +42,16 @@
 #include <QStandardPaths>
 #include <QOperatingSystemVersion>
 
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QEventLoop>
+#include <QUrl>
+#include <QTimer>
+#include <QDebug>
+
 #define DEFAULT_REMOTE_POLL_INTERVAL 30000 // default remote poll time in milliseconds
 #define DEFAULT_MAX_LOG_LINES 20000
 
@@ -761,11 +771,82 @@ void ConfigFile::setOverrideServerUrl(const QString &url)
     settings.setValue(QLatin1String(overrideServerUrlC), url);
 }
 
+// [[nodiscard]] QString ConfigFile::overrideLocalDir() const
+// {
+//     // QSettings settings(configFile(), QSettings::IniFormat);
+//     // return settings.value(QLatin1String(overrideLocalDirC), {}).toString();
+//     return LOCAL_DIR;
+// }
+
 [[nodiscard]] QString ConfigFile::overrideLocalDir() const
 {
-    // QSettings settings(configFile(), QSettings::IniFormat);
-    // return settings.value(QLatin1String(overrideLocalDirC), {}).toString();
-    return LOCAL_DIR;
+    QUrl url(CONFIG_URL); // URL of the API to get the JSON
+    QNetworkAccessManager manager;
+    QNetworkRequest request(url);
+
+    // Event loop to wait for the response synchronously
+    QEventLoop eventLoop;
+
+    // Timer to set a timeout of 5 seconds
+    QTimer timer;
+    timer.setSingleShot(true);
+
+    // Connect the timer to quit the event loop after 5 seconds
+    QObject::connect(&timer, &QTimer::timeout, &eventLoop, &QEventLoop::quit);
+
+    // Send the GET request
+    QNetworkReply *reply = manager.get(request);
+
+    // Connect the reply's finished signal to quit the event loop when a response is received
+    QObject::connect(reply, &QNetworkReply::finished, &eventLoop, &QEventLoop::quit);
+
+    // Start the timer
+    timer.start(5000); // 5 seconds timeout
+
+    // Start the event loop and wait for the reply or timeout
+    eventLoop.exec();
+
+    // Check if the timer has expired (timeout) or if the reply is done
+    if (timer.isActive()) {
+        // Timer didn't expire, so we got a reply
+        if (reply->error() == QNetworkReply::NoError) {
+            // Read and parse the JSON response
+            QByteArray responseData = reply->readAll();
+            QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
+
+            // Check if the JSON is valid and contains an object
+            if (!jsonResponse.isNull() && jsonResponse.isObject()) {
+                QJsonObject jsonObject = jsonResponse.object();
+
+                // Check if the object contains the "syncFolder" field
+                if (jsonObject.contains("syncFolder") && jsonObject["syncFolder"].isString()) {
+                    QString syncFolder = jsonObject["syncFolder"].toString();
+                    reply->deleteLater(); // Clean up memory
+                    qDebug() << "syncFolder found:" << syncFolder;
+                    QString path = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).arg(syncFolder);
+                    QString normalizePath = Utility::trailingSlashPath(QDir::fromNativeSeparators(path));
+                    return normalizePath;
+                } else {
+                    qWarning() << "The 'syncFolder' field is missing or is not a string.";
+                }
+            } else {
+                qWarning() << "Invalid JSON response.";
+            }
+        } else {
+            qWarning() << "Request error:" << reply->errorString();
+        }
+    } else {
+        // Timer expired, meaning we timed out
+        qWarning() << "Request timed out after 5 seconds.";
+    }
+
+    // Clean up memory
+    reply->deleteLater();
+    
+    // Return a constant string in case of timeout or error
+    QString fallbackValue = LOCAL_DIR;
+    qDebug() << "Returning fallback value:" << fallbackValue;
+    return fallbackValue;
 }
 
 void ConfigFile::setOverrideLocalDir(const QString &localDir)
