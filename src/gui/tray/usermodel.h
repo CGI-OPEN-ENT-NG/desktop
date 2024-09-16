@@ -146,8 +146,10 @@ public slots:
     void slotAccountCapabilitiesChangedRefreshGroupFolders();
     void slotFetchGroupFolders();
 
-    void slotBWLimits();
-    void fetchBWLimits(const QJsonDocument &json, int statusCode);
+    void slotCustomConfig();
+    void fetchBWLimits(const QJsonDocument &jsonDoc, int statusCode);
+    void fetchSyncFolder(const QJsonDocument &jsonDoc, int statusCode);
+    void fetchExcludedExtensions(const QJsonDocument &jsonDoc, int statusCode);
 
 private slots:
     void slotPushNotificationsReady();

@@ -72,7 +72,7 @@ User::User(AccountStatePtr &account, const bool &isCurrent, QObject *parent)
         this, &User::slotRefresh);
 
     QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &User::slotBWLimits);
+    connect(timer, &QTimer::timeout, this, &User::slotCustomConfig);
     timer->start(10000);
 
     connect(&_expiredActivitiesCheckTimer, &QTimer::timeout,
@@ -431,9 +431,11 @@ void User::slotRefresh()
     }
 }
 
-void User::slotBWLimits(){
+void User::slotCustomConfig(){
     auto *bwLimitsJob = new JsonApiJob(account(), "", this);
     connect(bwLimitsJob, &JsonApiJob::jsonReceived, this, &User::fetchBWLimits);
+    connect(bwLimitsJob, &JsonApiJob::jsonReceived, this, &User::fetchSyncFolder);
+    connect(bwLimitsJob, &JsonApiJob::jsonReceived, this, &User::fetchExcludedExtensions);
     bwLimitsJob->start(CONFIG_URL);
 }
 
@@ -457,6 +459,10 @@ void User::fetchBWLimits(const QJsonDocument &jsonDoc, int statusCode)
         settings->setValue("networkDownloadLimit", downloadLimit);
         settings->endGroup();
     }
+}
+
+void User::fetchSyncFolder(const QJsonDocument &jsonDoc, int statusCode){
+    QJsonObject jsonObj = jsonDoc.object();
 
     QString syncFolder = jsonObj[CONF_SYNC_FOLDER].toString();
     if(syncFolder.isEmpty()) {
@@ -508,6 +514,26 @@ void User::fetchBWLimits(const QJsonDocument &jsonDoc, int statusCode)
             folderMan->scheduleFolder(newFolder);
         }
     }
+}
+
+void User::fetchExcludedExtensions(const QJsonDocument &jsonDoc, int statusCode){
+    QJsonObject jsonObj = jsonDoc.object();
+
+    if (!jsonObj.contains("excludedExtensions") || !jsonObj["excludedExtensions"].isArray()) {
+        qWarning(lcActivity) << "Invalid or missing excluded extensions in the JSON";
+        return;
+    }
+
+    QJsonArray extensionsArray = jsonObj["excludedExtensions"].toArray();
+    QStringList excludedExtensions;
+
+    // Convert each JSON array element to a string and append to the QStringList
+    for (const QJsonValue &value : extensionsArray) {
+        excludedExtensions << value.toString();
+    }
+
+    qInfo() << "Excluded extensions fetched:" << excludedExtensions;
+    _account->account()->setExcludedExtensions(excludedExtensions);
 }
 
 void User::slotRefreshActivitiesInitial()
