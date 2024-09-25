@@ -7,6 +7,7 @@
 #include <QStringList>
 #include <QQuickImageProvider>
 #include <QHash>
+#include <QNetworkAccessManager>
 
 #include "accountfwd.h"
 #include "accountmanager.h"
@@ -147,9 +148,9 @@ public slots:
     void slotFetchGroupFolders();
 
     void slotCustomConfig();
-    void fetchBWLimits(const QJsonDocument &jsonDoc, int statusCode);
-    void fetchSyncFolder(const QJsonDocument &jsonDoc, int statusCode);
-    void fetchExcludedExtensions(const QJsonDocument &jsonDoc, int statusCode);
+    void fetchBWLimits(const QJsonDocument &jsonDoc);
+    void fetchSyncFolder(const QJsonDocument &jsonDoc);
+    void fetchExcludedExtensions(const QJsonDocument &jsonDoc);
 
 private slots:
     void slotPushNotificationsReady();
@@ -181,6 +182,7 @@ private:
     [[nodiscard]] bool serverHasTalk() const;
 
     AccountStatePtr _account;
+    QNetworkAccessManager _manager;
     bool _isCurrentUser;
     ActivityListModel *_activityModel;
     UnifiedSearchResultsListModel *_unifiedSearchResultsModel;

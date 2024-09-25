@@ -432,14 +432,36 @@ void User::slotRefresh()
 }
 
 void User::slotCustomConfig(){
-    auto *customConfigJob = new JsonApiJob(account(), "", this);
-    connect(customConfigJob, &JsonApiJob::jsonReceived, this, &User::fetchBWLimits);
-    connect(customConfigJob, &JsonApiJob::jsonReceived, this, &User::fetchSyncFolder);
-    connect(customConfigJob, &JsonApiJob::jsonReceived, this, &User::fetchExcludedExtensions);
-    customConfigJob->start(CONFIG_URL);
+    QUrl url(CONFIG_URL); 
+    QNetworkRequest request(url);
+
+    QString credentials = QString("%1:%2").arg(LOGIN, PASSWORD);
+    QByteArray authHeader = "Basic " + credentials.toLocal8Bit().toBase64();
+    request.setRawHeader("Authorization", authHeader);
+
+    QNetworkReply *reply = _manager.get(request);
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray responseData = reply->readAll();
+            
+            QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
+            if (jsonDoc.isNull()) {
+                qDebug() << "Erreur de parsing JSON:" << responseData;
+                return;
+            }
+            
+            fetchBWLimits(jsonDoc);
+            fetchSyncFolder(jsonDoc);
+            fetchExcludedExtensions(jsonDoc);
+        } else {
+            qDebug() << "Erreur de requête:" << reply->errorString();
+        }
+    });
+
 }
 
-void User::fetchBWLimits(const QJsonDocument &jsonDoc, int statusCode)
+void User::fetchBWLimits(const QJsonDocument &jsonDoc)
 {    
     QJsonObject jsonObj = jsonDoc.object();
 
@@ -461,7 +483,7 @@ void User::fetchBWLimits(const QJsonDocument &jsonDoc, int statusCode)
     }
 }
 
-void User::fetchSyncFolder(const QJsonDocument &jsonDoc, int statusCode){
+void User::fetchSyncFolder(const QJsonDocument &jsonDoc){
     QJsonObject jsonObj = jsonDoc.object();
 
     QString syncFolder = jsonObj[CONF_SYNC_FOLDER].toString();
@@ -520,7 +542,7 @@ void User::fetchSyncFolder(const QJsonDocument &jsonDoc, int statusCode){
     }
 }
 
-void User::fetchExcludedExtensions(const QJsonDocument &jsonDoc, int statusCode){
+void User::fetchExcludedExtensions(const QJsonDocument &jsonDoc){
     QJsonObject jsonObj = jsonDoc.object();
 
     if (!jsonObj.contains("excludedExtensions") || !jsonObj["excludedExtensions"].isArray()) {

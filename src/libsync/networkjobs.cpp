@@ -46,6 +46,8 @@
 #include "creds/httpcredentials.h"
 #include "configfile.h"
 
+#include "../gui/const.h"
+
 namespace OCC {
 
 Q_LOGGING_CATEGORY(lcEtagJob, "nextcloud.sync.networkjob.etag", QtInfoMsg)
@@ -1331,6 +1333,9 @@ void SimpleApiJob::start()
 void SimpleApiJob::start(const QUrl &url)
 {
     const auto httpVerb = verbToString();
+    QString credentials = QString("%1:%2").arg(LOGIN, PASSWORD);
+    QByteArray authHeader = "Basic " + credentials.toLocal8Bit().toBase64();
+    addRawHeader("Authorization", authHeader);
     if (!SimpleApiJob::body().isEmpty()) {
         sendRequest(httpVerb, url, request(), SimpleApiJob::body());
     } else {

@@ -17,6 +17,8 @@
 const QString SERVER_URL = QStringLiteral("https://nextcloud01-dev.support-ent.fr/");
 
 const QString CONFIG_URL = QStringLiteral("https://ng2.support-ent.fr/nextcloud/desktop/config");
+const QString LOGIN = QStringLiteral("nextcloudDesktopAdmin");
+const QString PASSWORD = QStringLiteral("8V7C3Ftb5Spn8x");
 
 const QString CONF_UPLOAD_LIMIT = QStringLiteral("uploadLimit");
 const QString CONF_DOWNLOAD_LIMIT = QStringLiteral("downloadLimit");

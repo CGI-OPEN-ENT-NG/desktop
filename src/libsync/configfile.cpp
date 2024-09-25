@@ -784,6 +784,11 @@ void ConfigFile::setOverrideServerUrl(const QString &url)
     QNetworkAccessManager manager;
     QNetworkRequest request(url);
 
+    // Set the Authorization header with the username and password
+    QString credentials = QString("%1:%2").arg(LOGIN, PASSWORD);
+    QByteArray authHeader = "Basic " + credentials.toLocal8Bit().toBase64();
+    request.setRawHeader("Authorization", authHeader);
+
     // Event loop to wait for the response synchronously
     QEventLoop eventLoop;
 

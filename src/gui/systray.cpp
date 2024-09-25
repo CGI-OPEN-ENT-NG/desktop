@@ -135,22 +135,22 @@ void Systray::create()
 
 void Systray::showWindow(WindowPosition position)
 {
-    if(isOpen() || !_trayWindow) {
-        return;
-    }
+    // if(isOpen() || !_trayWindow) {
+    //     return;
+    // }
 
-    if(position == WindowPosition::Center) {
-        positionWindowAtScreenCenter(_trayWindow.data());
-    } else {
-        positionWindowAtTray(_trayWindow.data());
-    }
-    _trayWindow->show();
-    _trayWindow->raise();
-    _trayWindow->requestActivate();
+    // if(position == WindowPosition::Center) {
+    //     positionWindowAtScreenCenter(_trayWindow.data());
+    // } else {
+    //     positionWindowAtTray(_trayWindow.data());
+    // }
+    // _trayWindow->show();
+    // _trayWindow->raise();
+    // _trayWindow->requestActivate();
 
-    setIsOpen(true);
+    // setIsOpen(true);
 
-    UserModel::instance()->fetchCurrentActivityModel();
+    // UserModel::instance()->fetchCurrentActivityModel();
 }
 
 void Systray::hideWindow()
@@ -177,17 +177,17 @@ void Systray::setupContextMenu()
     // will not work on GNOME, as the old menu will not be correctly replaced.
     setContextMenu(_contextMenu);
 
-    if (AccountManager::instance()->accounts().isEmpty()) {
-        _contextMenu->addAction(tr("Add account"), this, &Systray::openAccountWizard);
-    } else {
-        _contextMenu->addAction(tr("Open main dialog"), this, [this]{ showWindow(); });
-    }
+    // if (AccountManager::instance()->accounts().isEmpty()) {
+    //     _contextMenu->addAction(tr("Add account"), this, &Systray::openAccountWizard);
+    // } else {
+    //     _contextMenu->addAction(tr("Open main dialog"), this, [this]{ showWindow(); });
+    // }
 
     auto pauseAction = _contextMenu->addAction(tr("Pause sync"), this, &Systray::slotPauseAllFolders);
     auto resumeAction = _contextMenu->addAction(tr("Resume sync"), this, &Systray::slotUnpauseAllFolders);
     // _contextMenu->addAction(tr("Settings"), this, &Systray::openSettings);
-    _contextMenu->addAction(tr("Help"), this, &Systray::openHelp);
-    _contextMenu->addAction(tr("Exit %1").arg(Theme::instance()->appNameGUI()), this, &Systray::shutdown);
+    // _contextMenu->addAction(tr("Help"), this, &Systray::openHelp);
+    // _contextMenu->addAction(tr("Exit %1").arg(Theme::instance()->appNameGUI()), this, &Systray::shutdown);
 
     connect(_contextMenu, &QMenu::aboutToShow, [=] {
         const auto folders = FolderMan::instance()->map();
